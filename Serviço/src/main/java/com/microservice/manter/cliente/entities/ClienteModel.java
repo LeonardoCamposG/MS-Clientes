@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @CrossOrigin("*")
@@ -24,6 +25,7 @@ public class ClienteModel implements Serializable{
 	private String	nome;
 	private Integer idade;
 	private String  cidade;
+	@Size(max = 2)
 	private String  estado;
 	private String  rep; // Representante.
 	
