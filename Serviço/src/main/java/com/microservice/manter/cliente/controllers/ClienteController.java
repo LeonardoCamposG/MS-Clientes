@@ -21,6 +21,9 @@ import com.microservice.manter.cliente.dtos.ClienteRecordDto;
 import com.microservice.manter.cliente.entities.ClienteModel;
 import com.microservice.manter.cliente.services.ClienteService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 @RestController
@@ -30,11 +33,17 @@ public class ClienteController {
 	@Autowired
 	private ClienteService clienteService;
 	
+	@Operation(summary = "Busca todos os clientes", description = "Retorna uma lista de todos os clientes")
 	@GetMapping()
 	public ResponseEntity<List<ClienteModel>> buscarTodosClientes(){
 		return ResponseEntity.status(HttpStatus.OK).body(clienteService.buscarTodosClientes());
 	}
 	
+	@Operation(summary = "Busca um cliente por ID", description = "Retorna um cliente específico pelo ID")
+	@ApiResponses(value = {
+	       @ApiResponse(responseCode = "200", description = "Cliente encontrado"),
+	       @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+	   })
 	@GetMapping("/id/{id}")
 	public ResponseEntity<Object> buscarClientePorId(@PathVariable(value = "id") UUID id){
 		Optional<ClienteModel> cliente = clienteService.buscarClientePorId(id);
@@ -44,6 +53,11 @@ public class ClienteController {
 		return ResponseEntity.status(HttpStatus.OK).body(cliente.get());
 	}
 	
+	@Operation(summary = "Busca clientes por estado", description = "Retorna uma lista de clientes pelo estado")
+	   @ApiResponses(value = {
+	       @ApiResponse(responseCode = "200", description = "Clientes encontrados"),
+	       @ApiResponse(responseCode = "404", description = "Nenhum cliente encontrado para o estado")
+	   })
 	@GetMapping("/estado/{estado}")
 	public ResponseEntity<Object> buscarClientesPorEstado(@PathVariable(value = "estado") String estado){
 		List<ClienteModel> clientes = clienteService.buscarClientesPorEstado(estado)
@@ -54,6 +68,11 @@ public class ClienteController {
 		return ResponseEntity.status(HttpStatus.OK).body(clientes);
 	}
 	
+	@Operation(summary = "Busca clientes por representante", description = "Retorna uma lista de clientes pelo representante")
+	   @ApiResponses(value = {
+	       @ApiResponse(responseCode = "200", description = "Clientes encontrados"),
+	       @ApiResponse(responseCode = "404", description = "Nenhum cliente encontrado para o representante")
+	   })
 	@GetMapping("/rep/{rep}")
 	public ResponseEntity<Object> buscarClientesPorRepresentante(@PathVariable(value = "rep") String rep){
 		List<ClienteModel> clientes = clienteService.buscarClientesPorRepresentante(rep)
@@ -64,6 +83,11 @@ public class ClienteController {
 		return ResponseEntity.status(HttpStatus.OK).body(clientes);
 	}
 	
+	@Operation(summary = "Busca clientes por nome", description = "Retorna uma lista de clientes pelo nome")
+	   @ApiResponses(value = {
+	       @ApiResponse(responseCode = "200", description = "Clientes encontrados"),
+	       @ApiResponse(responseCode = "404", description = "Nenhum cliente encontrado com esse nome")
+	   })
 	@GetMapping("/nome/{nome}")
 	public ResponseEntity<Object> buscarClientesPorNome(@PathVariable(value = "nome") String nome){
 		List<ClienteModel> clientes = clienteService.buscarClientesPorNome(nome)
@@ -73,18 +97,21 @@ public class ClienteController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(clientes);
 	}
-	
+	 
+	@Operation(summary = "Cadastra um novo cliente", description = "Cria um novo cliente")
 	@PostMapping()
 	public ResponseEntity<ClienteModel> cadastrarCliente(@RequestBody @Valid ClienteRecordDto clienteRecordDto){
 		return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.inserirCliente(clienteRecordDto));
 	}
 	
+	@Operation(summary = "Atualiza um cliente existente", description = "Atualiza os dados de um cliente existente")
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> atualizarCliente(@PathVariable(value = "id") UUID id,
 												   @RequestBody @Valid ClienteRecordDto clienteRecordDto){
 		return ResponseEntity.status(HttpStatus.OK).body(clienteService.atualizarCliente(id, clienteRecordDto));
 	}
 	
+	@Operation(summary = "Deleta um cliente existente", description = "Remove um cliente existente pelo ID")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> deletarCliente(@PathVariable(value = "id") UUID id){
 		boolean test = clienteService.excluirClientePorId(id);
