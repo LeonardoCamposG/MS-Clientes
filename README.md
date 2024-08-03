@@ -20,7 +20,7 @@ A documentação da API pode ser visualizada através da interface Swagger. Veja
 
 ### Visão Geral da Documentação Swagger
 
-![Swagger Overview](docs/images/Visao geral.png)
+![Swagger Overview](docs/images/VisaoGeral.png)
 
 ### Para executar o projeto, basta copiar o o repositório, baixar as dependências do maven via spring boot, e aproveitar o projeto.
 
